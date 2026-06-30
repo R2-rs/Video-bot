@@ -186,7 +186,7 @@ async def video_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if pending_name:
 
      if video_exists(uid):
-        await update.message.reply_text(
+         await update.message.reply_text(
             "⚠️ این ویدیو قبلاً در دیتابیس ثبت شده است."
         )
 
