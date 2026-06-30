@@ -91,6 +91,20 @@ def count_videos():
 
     return total
 
+def video_exists(file_unique_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT 1 FROM videos WHERE file_unique_id = ?",
+        (file_unique_id,),
+    )
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    return result is not None
 
 # =========================
 # Commands
@@ -170,14 +184,23 @@ async def video_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # حالت ثبت
     if pending_name:
-        save_video(uid, pending_name)
 
+     if video_exists(uid):
         await update.message.reply_text(
-            f"✅ ذخیره شد:\n{pending_name}"
+            "⚠️ این ویدیو قبلاً در دیتابیس ثبت شده است."
         )
 
         pending_name = None
         return
+
+    save_video(uid, pending_name)
+
+    await update.message.reply_text(
+        f"✅ ذخیره شد:\n{pending_name}"
+    )
+
+    pending_name = None
+    return
 
     # حالت جستجو
     name = get_video_name(uid)
