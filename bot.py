@@ -7,6 +7,8 @@ from telegram.ext import (
     filters,
 )
 
+DB_PATH = r"D:\VideoBot\videos.db"
+
 import sqlite3
 
 TOKEN = "8843548872:AAHv8cGi9eRjcR-pZd6MpK6igklM4a2sTCk"
@@ -19,7 +21,7 @@ pending_name = None
 # =========================
 
 def save_video(file_unique_id, name):
-    conn = sqlite3.connect("videos.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -32,7 +34,7 @@ def save_video(file_unique_id, name):
 
 
 def get_video_name(file_unique_id):
-    conn = sqlite3.connect("videos.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -48,7 +50,7 @@ def get_video_name(file_unique_id):
 
 
 def get_all_videos():
-    conn = sqlite3.connect("videos.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT name FROM videos ORDER BY name")
@@ -61,7 +63,7 @@ def get_all_videos():
 
 
 def delete_video(name):
-    conn = sqlite3.connect("videos.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -78,7 +80,7 @@ def delete_video(name):
 
 
 def count_videos():
-    conn = sqlite3.connect("videos.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT COUNT(*) FROM videos")
@@ -181,7 +183,8 @@ async def video_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     name = get_video_name(uid)
 
     if name:
-        await update.message.reply_text(name)
+        await update.message.reply_text(f"<code>/arise {name}</code>\n\n<code>{name}</code>",
+    parse_mode="HTML")
     else:
         await update.message.reply_text(
             "❌ این ویدیو در دیتابیس ثبت نشده است."
