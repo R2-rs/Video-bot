@@ -185,22 +185,22 @@ async def video_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # حالت ثبت
     if pending_name:
 
-     if video_exists(uid):
-         await update.message.reply_text(
+        if video_exists(uid):
+        await update.message.reply_text(
             "⚠️ این ویدیو قبلاً در دیتابیس ثبت شده است."
         )
 
         pending_name = None
         return
 
-    save_video(uid, pending_name)
+        save_video(uid, pending_name)
 
-    await update.message.reply_text(
+        await update.message.reply_text(
         f"✅ ذخیره شد:\n{pending_name}"
-    )
+        )
 
-    pending_name = None
-    return
+         pending_name = None
+        return
 
     # حالت جستجو
     name = get_video_name(uid)
